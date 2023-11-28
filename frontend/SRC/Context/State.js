@@ -7,6 +7,7 @@ const Statedata = (props) => {
     const [settingsColor, setSettingsColor] = useState('grey');
     const [open, setOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isliked, setIsliked] = useState(false);
     const changeColor = () => {
         if (background_color === '#F3F2ED') {
             setBackground_color('#1B1B1B')
@@ -23,8 +24,11 @@ const Statedata = (props) => {
     const showVisible = ()=>{
         setIsVisible(!isVisible)
     }
+    const ShowLiked = ()=>{
+        setIsliked(!isliked)
+    }
     return (
-        <Context.Provider value={{ background_color, text_color, changeColor, open, settingsColor , showVisible, isVisible }}>
+        <Context.Provider value={{ background_color, text_color, changeColor, open, settingsColor , showVisible, isVisible , isliked, ShowLiked}}>
             {props.children}
         </Context.Provider>
     )
