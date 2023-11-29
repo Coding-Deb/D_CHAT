@@ -3,6 +3,8 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Icon, Input, Button } from '@rneui/themed';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
@@ -36,15 +38,23 @@ export default function Login() {
     return isValid;
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateInputs()) {
-      // Perform login logic here
-      // For now, navigate to the 'AllChat' screen
-      navigation.navigate('AllChat');
-      setEmail('')
-      setPassword('')
+      try {
+        const response = await axios.post('http://192.168.157.210:5000/api/auth/login', { email, password });
+        const token = response.data.token;
+        await AsyncStorage.setItem('token', token);
+        navigation.navigate('AllChat');
+        setEmail('')
+        setPassword('')
+        console.log(token);
+      } catch (error) {
+        console.log(error);
+      }
+      
     }
-  };
+  }
+
 
   return (
     <View style={styles.container}>
@@ -64,8 +74,8 @@ export default function Login() {
         onChangeText={(text) => setPassword(text)}
       />
       {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-      <Pressable style={styles.btn} onPress={handleLogin}>
-        <Text style={styles.btntext}>Login</Text>
+      <Pressable style={styles.btn} >
+        <Text style={styles.btntext} onPress={handleLogin}>Login</Text>
       </Pressable>
       <Button
         title="Don't have an account? Sign Up"

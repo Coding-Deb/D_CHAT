@@ -3,6 +3,7 @@ import { Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-n
 import { Ionicons, MaterialCommunityIcons, FontAwesome, FontAwesome5, Entypo, Feather } from 'react-native-vector-icons';
 import { ListItem } from '@rneui/themed';
 import { Overlay } from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Context from '../Context/Context';
 import { useNavigation } from '@react-navigation/native';
@@ -13,13 +14,21 @@ const width = Dimensions.get('screen').width;
 export default function TopTab({ page }) {
   const { background_color, text_color, showVisible } = useContext(Context);
   const navigation = useNavigation()
+  const handleLogout = async () => {
+    // Remove the token from AsyncStorage
+    await AsyncStorage.removeItem('token');
+    console.log('User Logged Out');
+
+    // Navigate to the login screen
+    navigation.navigate('Login');
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: background_color, borderBottomWidth: 2, borderBottomColor: 'grey' }]}>
       {page === 'About' ? (
         <View style={styles.topbar}>
           <Text style={[styles.text, { color: text_color }]}>Profile</Text>
-          <Pressable>
+          <Pressable onPress={handleLogout}>
             <MaterialCommunityIcons name="logout" size={30} color={text_color} />
           </Pressable>
         </View>
@@ -49,7 +58,7 @@ export default function TopTab({ page }) {
         <View style={styles.topbar}>
           <Text style={[styles.text, { color: text_color }]}>Groups</Text>
           <View style={{ flexDirection: 'row' }}>
-          <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('Search') }}>
+            <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('Search') }}>
               <Entypo name='magnifying-glass' size={27} color={text_color} />
             </Pressable>
             <Pressable style={{ marginHorizontal: 9 }} onPress={showVisible}>
