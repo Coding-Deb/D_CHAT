@@ -1,11 +1,14 @@
 import { Dimensions, Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import BottomTab from '../../Components/BottomTab'
 import Context from '../../Context/Context'
 import TopTab from '../../Components/TopTab'
 import { Feather, FontAwesome, Ionicons } from 'react-native-vector-icons'
 import { Switch } from '@rneui/themed';
 import { BottomSheet } from '@rneui/themed'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
+
 
 const height = Dimensions.get('screen').height
 const width = Dimensions.get('screen').width
@@ -13,6 +16,9 @@ const width = Dimensions.get('screen').width
 export default function AboutPage() {
   const { background_color, text_color, changeColor, open, settingsColor, showVisible, isVisible } = useContext(Context)
   const [userName, setUserName] = useState('');
+  const [username, setUsername] = useState(null);
+
+  
 
   const handleUserNameChange = (text) => {
     setUserName(text);
@@ -23,6 +29,29 @@ export default function AboutPage() {
     console.log('Submitted Group Name:', userName);
     setUserName('')
   };
+  useEffect(() => {
+    // Fetch the username using the token
+    const fetchUsername = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token'); // Replace with the actual token
+
+        // Make a request to your server's endpoint
+        const response = await axios.get('http://192.168.157.210:5000/api/auth/login', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUsername(response.data.username);
+      } catch (error) {
+        console.error('Error fetching username:', error.message);
+        // Handle errors as needed
+      }
+    };
+
+    // Call the fetchUsername function when the component mounts
+    fetchUsername();
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
       <TopTab page={'About'} />
@@ -39,7 +68,7 @@ export default function AboutPage() {
               <Feather name='camera' size={18} color={background_color} />
             </View>
           </View>
-          <Text style={[styles.username, { color: text_color }]}>Coding Deb</Text>
+          <Text style={[styles.username, { color: text_color }]}>{username}</Text>
           <Text style={[styles.desc, { color: text_color }]}>Hey I am using D CHAT </Text>
 
         </View>

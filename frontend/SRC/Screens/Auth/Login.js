@@ -25,7 +25,7 @@ export default function Login() {
       isValid = false;
     } else {
       setEmailError('');
-    }
+    } 
 
     // Password validation
     if (!password || password.length < 6) {
@@ -36,7 +36,7 @@ export default function Login() {
     }
 
     return isValid;
-  };
+  }; 
 
   const handleLogin = async () => {
     if (validateInputs()) {

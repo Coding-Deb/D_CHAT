@@ -3,6 +3,7 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Icon, Input, Button } from '@rneui/themed';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
@@ -13,19 +14,64 @@ export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
-  const handleRegister = () => {
-    // Basic validation
-    if (!email || !username || !password || !confirmPassword) {
-      alert('Please fill in all the fields');
-      return;
+  // const handleRegister = () => {
+  //   // Basic validation
+  //   if (!email || !username || !password || !confirmPassword) {
+  //     alert('Please fill in all the fields');
+  //     return;
+  //   }
+
+  //   // You can add more specific validation here if needed
+
+  //   // If all validations pass, navigate to the next screen
+  //   navigation.navigate('Home');
+  // };
+  const validateInputs = () => {
+    let isValid = true;
+
+    // Email validation
+    if (!email || !email.includes('@')) {
+      setEmailError('Invalid email address');
+      isValid = false;
+    } else {
+      setEmailError('');
+    } 
+
+    // Password validation
+    if (!password || password.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
+      isValid = false;
+    } else {
+      setPasswordError('');
     }
 
-    // You can add more specific validation here if needed
-
-    // If all validations pass, navigate to the next screen
-    navigation.navigate('Home');
+    return isValid;
   };
+
+  const handleRegister = async () => {
+    if (validateInputs()) {
+      try {
+        const response = await axios.post('http://192.168.157.210:5000/api/auth/register', {
+          email,
+          username,
+          password,
+        });
+        navigation.navigate('Login');
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        setConfirmPassword('');
+        console.log('User Registered');
+      } catch (error) {
+        console.error('Registration failed:', error);
+        // Handle specific error cases if needed
+      }
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
