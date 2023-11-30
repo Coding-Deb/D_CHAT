@@ -14,6 +14,7 @@ import NotificationPage from './SRC/Screens/Pages/NotificationPage';
 import AllPostPage from './SRC/Screens/Pages/AllPostPage';
 import SearchPage from './SRC/Screens/Pages/SearchPage';
 import UpdatePage from './SRC/Screens/Pages/UpdatePage';
+import ChatPage from './SRC/Screens/Pages/ChatPage';
 
 export default function App() {
   const Stack = createNativeStackNavigator()
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name='Notification' component={NotificationPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Search' component={SearchPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Update' component={UpdatePage} options={{animation: 'slide_from_bottom'}} />
+          <Stack.Screen name='Chat' component={ChatPage} options={{animation: 'slide_from_right'}} />
           <Stack.Screen name='Onboarding' component={OnboardingPage} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,23 +1,37 @@
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs')
 const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model')
+const Chat = require('../Models/chat.model')
+
+// Configure Cloudinary with your API key, API secret, and cloud name
+cloudinary.config({
+  cloud_name: 'dbbjsrztd',
+  api_key: '665347456443981',
+  api_secret: 'GVmkrVkTkuhiH8qX8HNsaJ7PXSc'
+});
+
 
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Check if an image file is included in the request
     const user = new User({
       username,
       email,
       password: hashedPassword,
+
     });
 
     await user.save();
 
     res.json({ message: 'Registration successful' });
+
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ rror: 'Internal Server Error' + error });
   }
 };
 
@@ -138,14 +152,55 @@ exports.updateUserNamePassword = async (req, res) => {
   }
 };
 
-// exports.uploadImage = async (req, res) => {
-//   try {
-//     // Access the uploaded image information
-//     const imageUrl = req.file.path; // The Cloudinary URL of the uploaded image
+exports.sendChat = async (req, res) => {
+  const { senderId, receiverId, message } = req.body;
 
-//     // Do something with the imageUrl, like saving it to MongoDB or sending it as a response
-//     res.json({ imageUrl });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+  try {
+    const newChat = new Chat({
+      senderId,
+      receiverId,
+      message,
+    });
+
+   await newChat.save();
+    res.json({msg: 'Sent'});
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+exports.receiveChats = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    const { senderId, receiverId } = req.body;
+
+    // Validate that the provided senderId and receiverId are not empty
+    if (!senderId || !receiverId) {
+      return res.status(400).json({ error: 'SenderId and ReceiverId are required' });
+    }
+
+    // Fetch chats where either the senderId or receiverId matches the logged-in user
+    const chats = await Chat.find({
+      $or: [
+        { senderId: loggedInUserId, receiverId },
+        { senderId: receiverId, receiverId: loggedInUserId },
+      ],
+    });
+
+    // Respond with the chats
+    res.json({ message: chats });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

@@ -6,7 +6,7 @@ import { Overlay } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Context from '../Context/Context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
@@ -110,6 +110,17 @@ export default function TopTab({ page }) {
             </Pressable>
         </View>
       ) : null}
+      {page === 'Chat' ? (
+        <View style={styles.topbar}>
+          <Text style={[styles.text, { color: text_color }]}>
+            Tridip
+          </Text>
+          <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
+              <Entypo name='phone' size={27} color={text_color} />
+            </Pressable>
+        </View>
+      ) : null}
+      
 
     </View>
   );

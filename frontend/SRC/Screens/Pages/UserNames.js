@@ -5,6 +5,7 @@ import Context from '../../Context/Context'
 import TopTab from '../../Components/TopTab'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import { useNavigation } from '@react-navigation/native'
 
 const height = Dimensions.get('screen').height
 const width = Dimensions.get('screen').width
@@ -12,6 +13,7 @@ const width = Dimensions.get('screen').width
 export default function UserNames() {
   const { background_color, text_color } = useContext(Context)
   const [usernames, setUsernames] = useState([]);
+  const navigation = useNavigation()
   useEffect(() => {
     // Fetch the username using the token
     const fetchUsername = async () => {
@@ -47,7 +49,7 @@ export default function UserNames() {
             data={usernames}
             renderItem={({ item }) => {
               return (
-                <Pressable key={item._id} style={{ marginVertical: 10, borderBottomColor: 'grey', borderBottomWidth: 0.5, justifyContent: 'center' }}>
+                <Pressable key={item._id} style={{ marginVertical: 10, borderBottomColor: 'grey', borderBottomWidth: 0.5, justifyContent: 'center' }} onPress={() => { navigation.navigate('Chat') }}>
                   <Text style={{ fontSize: 18, fontWeight: '800', color: text_color, margin: 12 }}>
                     {item.username}
                   </Text>
