@@ -8,6 +8,8 @@ import { Switch } from '@rneui/themed';
 import { BottomSheet } from '@rneui/themed'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
+import { useNavigation } from '@react-navigation/native'
+import * as ImagePicker from 'expo-image-picker';
 
 
 const height = Dimensions.get('screen').height
@@ -17,18 +19,37 @@ export default function AboutPage() {
   const { background_color, text_color, changeColor, open, settingsColor, showVisible, isVisible } = useContext(Context)
   const [userName, setUserName] = useState('');
   const [username, setUsername] = useState(null);
-
+  const [imageUri, setImageUri] = useState(null);
+  const navigation = useNavigation()
   
 
   const handleUserNameChange = (text) => {
     setUserName(text);
   };
-
+ 
   const handleSubmit = () => {
     // Add your logic for handling the submitted group name here
     console.log('Submitted Group Name:', userName);
     setUserName('')
   };
+   // Function to open the image picker
+   const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      setImageUri(imageUri);
+      console.log(imageUri);
+      // You can use 'imageUri' elsewhere in your code as needed
+    }
+  };
+  
+
   useEffect(() => {
     // Fetch the username using the token
     const fetchUsername = async () => {
@@ -64,9 +85,9 @@ export default function AboutPage() {
               style={{ height: 120, width: 120, margin: 15, borderRadius: 100 }}
               resizeMode='contain'
             />
-            <View style={{ height: 37, width: 37, borderRadius: 100, bottom: 47, left: 32, justifyContent: 'center', alignItems: 'center', backgroundColor: text_color }}>
+            <Pressable style={{ height: 37, width: 37, borderRadius: 100, bottom: 47, left: 32, justifyContent: 'center', alignItems: 'center', backgroundColor: text_color }} onPress={pickImage}>
               <Feather name='camera' size={18} color={background_color} />
-            </View>
+            </Pressable>
           </View>
           <Text style={[styles.username, { color: text_color }]}>{username}</Text>
           <Text style={[styles.desc, { color: text_color }]}>Hey I am using D CHAT </Text>
@@ -74,11 +95,11 @@ export default function AboutPage() {
         </View>
         <View style={[styles.colcontent, ]}>
           <Switch onChange={changeColor} value={open} color={text_color} />
-          <Pressable onPress={showVisible}>
+          <Pressable onPress={()=>{navigation.navigate('Update')}}>
             <FontAwesome name='edit' color={text_color} size={25} />
           </Pressable>
         </View>
-        <BottomSheet isVisible={isVisible} >
+        {/* <BottomSheet isVisible={isVisible} >
           <View style={[styles.bottomsheetview,{backgroundColor:settingsColor}]}>
             <Pressable style={styles.bottomsheetbtn}>
               <Text style={styles.bottomsheetbtntxt}>
@@ -96,7 +117,8 @@ export default function AboutPage() {
               Cancel
             </Text>
           </View>
-        </BottomSheet>
+        </BottomSheet> */}
+        
       </View>
       <BottomTab page={'About'} />
     </View>
@@ -175,7 +197,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#305F96',
     fontSize: 18
-  },
+  }, 
   bottomsheetbtn: {
     // backgroundColor: '#305F96',
     borderRadius: 14,

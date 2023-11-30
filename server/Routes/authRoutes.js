@@ -8,6 +8,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/login',authController.getUsernameFromToken)
 router.get('/users',authController.getAllUsernamesExceptLoggedInUser)
+router.put('/update',authController.updateUserNamePassword)
 
 
 module.exports = router;

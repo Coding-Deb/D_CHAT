@@ -100,6 +100,16 @@ export default function TopTab({ page }) {
           </Text>
         </View>
       ) : null}
+      {page === 'Users' ? (
+        <View style={styles.topbar}>
+          <Text style={[styles.text, { color: text_color }]}>
+            All Users
+          </Text>
+          <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
+              <Entypo name='magnifying-glass' size={27} color={text_color} />
+            </Pressable>
+        </View>
+      ) : null}
 
     </View>
   );

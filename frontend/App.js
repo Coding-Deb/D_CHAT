@@ -13,6 +13,7 @@ import Register from './SRC/Screens/Auth/Register';
 import NotificationPage from './SRC/Screens/Pages/NotificationPage';
 import AllPostPage from './SRC/Screens/Pages/AllPostPage';
 import SearchPage from './SRC/Screens/Pages/SearchPage';
+import UpdatePage from './SRC/Screens/Pages/UpdatePage';
 
 export default function App() {
   const Stack = createNativeStackNavigator()
@@ -29,6 +30,7 @@ export default function App() {
           <Stack.Screen name='Register' component={Register} options={{animation: 'slide_from_left'}} />
           <Stack.Screen name='Notification' component={NotificationPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Search' component={SearchPage} options={{animation: 'slide_from_bottom'}} />
+          <Stack.Screen name='Update' component={UpdatePage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Onboarding' component={OnboardingPage} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -31,7 +31,7 @@ export default function AllGroupPage() {
         <View style={styles.main}>
           <View style={styles.inputbox}>
            </View>
-          <Text style={styles.text}>
+          <Text style={[styles.text,{color:text_color}]}>
             Groups
           </Text>
           <BottomSheet isVisible={isVisible} >

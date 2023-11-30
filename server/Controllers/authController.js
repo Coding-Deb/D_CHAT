@@ -2,48 +2,47 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model')
 
-
 exports.register = async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    const { username, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({
-            username,
-            email,
-            password: hashedPassword,
-        });
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-        await user.save();
+    await user.save();
 
-        res.json({ message: 'Registration successful' });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}; 
+    res.json({ message: 'Registration successful' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 exports.login = async (req, res) => {
   try {
-      const { email, password } = req.body;
+    const { email, password } = req.body;
 
-      const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-      if (!user) {
-          return res.status(401).json({ error: 'Invalid email or password' });
-      }
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
 
-      const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
 
-      if (!validPassword) {
-          return res.status(401).json({ error: 'Invalid email or password' });
-      }
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
 
-      // Token generation only if the user and password are valid
-      const token = jwt.sign({ userId: user._id, username: user.username }, 'Debanshu', { expiresIn: '7d' });
+    // Token generation only if the user and password are valid
+    const token = jwt.sign({ userId: user._id, username: user.username }, 'Debanshu', { expiresIn: '7d' });
 
-      res.json({ token });
+    res.json({ token });
   } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -63,7 +62,7 @@ exports.getUsernameFromToken = async (req, res) => {
     }
 
     // Respond with the username
-    res.json({ username: user.username , logged_id: user._id });
+    res.json({ username: user.username, logged_id: user._id });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
@@ -102,3 +101,51 @@ exports.getAllUsernamesExceptLoggedInUser = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.updateUserNamePassword = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the user based on the decoded token
+    const user = await User.findById(decodedToken.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the username and/or password
+    if (username) {
+      user.username = username;
+    }
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    res.json({ message: 'Username and/or password updated successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// exports.uploadImage = async (req, res) => {
+//   try {
+//     // Access the uploaded image information
+//     const imageUrl = req.file.path; // The Cloudinary URL of the uploaded image
+
+//     // Do something with the imageUrl, like saving it to MongoDB or sending it as a response
+//     res.json({ imageUrl });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

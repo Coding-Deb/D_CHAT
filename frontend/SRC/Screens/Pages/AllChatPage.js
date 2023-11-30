@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, View, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons'; // Import the icon from the vector icon library
 import BottomTab from '../../Components/BottomTab';
@@ -14,39 +14,51 @@ const width = Dimensions.get('screen').width;
 export default function AllChatPage() {
   const { background_color, text_color } = useContext(Context);
   const navigation = useNavigation()
-  const [usernames, setUsernames] = useState([]);
-  useEffect(() => {
-    // Fetch the username using the token
-    const fetchUsername = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token'); // Replace with the actual token
+  // const [usernames, setUsernames] = useState([]);
+  // useEffect(() => {
+  //   // Fetch the username using the token
+  //   const fetchUsername = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token'); // Replace with the actual token
 
-        // Make a request to your server's endpoint
-        const response = await axios.get('http://192.168.157.210:5000/api/auth/users', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //       // Make a request to your server's endpoint
+  //       const response = await axios.get('http://192.168.157.210:5000/api/auth/users', {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        setUsernames(response.data.usernames);
-        console.log(usernames);
-      } catch (error) {
-        console.error('Error fetching username:', error.message);
-        // Handle errors as needed
-      }
-    };
+  //       setUsernames(response.data.usernames);
+  //       console.log(response.data.usernames); // Update this line to log the response data directly
+  //     } catch (error) {
+  //       console.error('Error fetching username:', error.message);
+  //       // Handle errors as needed
+  //     }
+  //   };
 
-    // Call the fetchUsername function when the component mounts
-    fetchUsername();
-  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+  //   // Call the fetchUsername function when the component mounts
+  //   fetchUsername();
+  // }, []); // Remove usernames from the dependency array
 
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
       <TopTab page={'Allchat'} />
       <View style={{ justifyContent: 'space-between', height: height - 130 }}>
-        <View style={styles.inputbox}>
-          
-        </View>
+        <Text style={[styles.text,{color:text_color}]}>
+          All Chat
+        </Text>
+        {/* <FlatList
+        data={usernames}
+        renderItem={({item})=>{
+          return(
+            <Pressable key={item._id} style={{marginVertical:10,borderBottomColor:'grey',borderBottomWidth:0.5,justifyContent:'center'}}>
+              <Text style={{fontSize:18,fontWeight:'800',color:text_color,margin:12}}>
+                {item.username}
+              </Text>
+            </Pressable>
+          )
+        }}
+        /> */}
         <BottomTab page={'Allchat'} />
 
         {/* Floating button */}

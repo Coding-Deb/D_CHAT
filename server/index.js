@@ -3,13 +3,20 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 5000
+// const multer = require('multer');
+// const cloudinary = require('cloudinary').v2;
 
-// MongoDB connection
-// mongoose.connect('mongodb+srv://debanshu1234:debanshu1234@cluster0.mswzdgw.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true },
-// () => {
-//     console.log('Connected To Database');
-// }
-// );
+// // Cloudinary Configuration
+// cloudinary.config({ 
+//   cloud_name: 'dbbjsrztd', 
+//   api_key: '665347456443981', 
+//   api_secret: 'GVmkrVkTkuhiH8qX8HNsaJ7PXSc' 
+// });
+
+// // Multer Configuration
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
 
 // MongoDB Connection
 mongoose.connect('mongodb+srv://debanshu1234:debanshu1234@cluster0.mswzdgw.mongodb.net/', {
