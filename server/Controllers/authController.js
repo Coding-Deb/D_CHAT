@@ -33,7 +33,7 @@ exports.register = async (req, res) => {
   } catch (error) {
     res.status(500).json({ rror: 'Internal Server Error' + error });
   }
-};
+}; 
 
 exports.login = async (req, res) => {
   try {
@@ -184,7 +184,7 @@ exports.receiveChats = async (req, res) => {
 
     // Validate that the provided senderId and receiverId are not empty
     if (!senderId || !receiverId) {
-      return res.status(400).json({ error: 'SenderId and ReceiverId are required' });
+      return res.json({ message: 'SenderId and ReceiverId are required' });
     }
 
     // Fetch chats where either the senderId or receiverId matches the logged-in user
@@ -196,7 +196,7 @@ exports.receiveChats = async (req, res) => {
     });
 
     // Respond with the chats
-    res.json({ message: chats });
+    res.json(chats);
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });

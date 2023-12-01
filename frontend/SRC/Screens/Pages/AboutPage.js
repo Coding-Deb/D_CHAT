@@ -17,21 +17,12 @@ const width = Dimensions.get('screen').width
 
 export default function AboutPage() {
   const { background_color, text_color, changeColor, open, settingsColor, showVisible, isVisible } = useContext(Context)
-  const [userName, setUserName] = useState('');
+  // const [userName, setUserName] = useState('');
   const [username, setUsername] = useState(null);
   const [imageUri, setImageUri] = useState(null);
   const navigation = useNavigation()
   
 
-  const handleUserNameChange = (text) => {
-    setUserName(text);
-  };
- 
-  const handleSubmit = () => {
-    // Add your logic for handling the submitted group name here
-    console.log('Submitted Group Name:', userName);
-    setUserName('')
-  };
    // Function to open the image picker
    const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
