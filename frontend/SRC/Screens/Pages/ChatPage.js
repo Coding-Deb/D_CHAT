@@ -51,15 +51,54 @@ export default function ChatPage() {
     //           },
     //         });
 
-    //         setGetchat(response.data.message.message);
+    //         setGetchat(response.data.message);
     //       } catch (error) {
     //         console.error('Error fetching username:', error.message);
     //         // Handle errors as needed
     //       }
     //     };
 
-      // Call the fetchUsername function when the component mounts
-      fetchUsername();
+
+    // // Assuming you are calling this function in a component or wherever needed
+    // const getChats = async () => {
+    //   try {
+    //     // Replace 'YOUR_API_ENDPOINT' with the actual endpoint
+    //     const apiUrl = 'http://192.168.157.210:5000/api/auth/get_chats';
+    
+    //     // Assuming you have the senderId and receiverId stored in some variables
+    //     const senderId = username;
+    //     const receiverId = id;
+    
+    //     // Assuming you have the authentication token stored in some variable
+    //     const authToken = await AsyncStorage.getItem('token'); // Replace with the actual token
+    
+    //     // Make a POST request to fetch chats
+    //     const response = await axios.post(
+    //       apiUrl,
+    //       { senderId, receiverId },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${authToken}`,
+    //           'Content-Type': 'application/json',
+    //         },
+    //       }
+    //     );
+    
+    //     // Handle the response data here
+    //     console.log('Chats:', response.data);
+    //   } catch (error) {
+    //     // Handle errors here
+    //     console.error('Error fetching chats:', error);
+    //   }
+    // };
+    
+    // Call the function to fetch chats when needed
+    
+    
+    
+    // Call the fetchUsername function when the component mounts
+    fetchUsername();
+    // getChats();
       // fetchChat()
     }, []); // The empty dependency array ensures that this effect runs once when the component mounts
 

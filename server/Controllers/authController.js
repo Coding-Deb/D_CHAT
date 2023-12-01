@@ -4,6 +4,7 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model')
 const Chat = require('../Models/chat.model')
+const multer = require('multer');
 
 // Configure Cloudinary with your API key, API secret, and cloud name
 cloudinary.config({
@@ -12,18 +13,30 @@ cloudinary.config({
   api_secret: 'GVmkrVkTkuhiH8qX8HNsaJ7PXSc'
 });
 
+// Multer Configuration
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    let img_url = ''; // Initialize img_url variable
     // Check if an image file is included in the request
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'public' // Update with the desired folder name
+      });
+
+      img_url = result.secure_url; // Save the secure URL of the uploaded image
+    }
     const user = new User({
       username,
       email,
       password: hashedPassword,
-
+      img: img_url // Save the image URL in the user object
     });
 
     await user.save();
@@ -31,9 +44,9 @@ exports.register = async (req, res) => {
     res.json({ message: 'Registration successful' });
 
   } catch (error) {
-    res.status(500).json({ rror: 'Internal Server Error' + error });
+    res.status(500).json({ error: 'Internal Server Error' + error });
   }
-}; 
+};
 
 exports.login = async (req, res) => {
   try {
@@ -162,8 +175,11 @@ exports.sendChat = async (req, res) => {
       message,
     });
 
-   await newChat.save();
-    res.json({msg: 'Sent'});
+    await newChat.save();
+    // Push the chat message to the sender's and receiver's data
+    await User.findByIdAndUpdate(senderId, { $push: { chats: newChat._id } });
+    await User.findByIdAndUpdate(receiverId, { $push: { chats: newChat._id } });
+    res.json({ msg: 'Sent' });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -187,7 +203,7 @@ exports.receiveChats = async (req, res) => {
       return res.json({ message: 'SenderId and ReceiverId are required' });
     }
 
-    // Fetch chats where either the senderId or receiverId matches the logged-in user
+    // Fetch chats where both the senderId and receiverId match the logged-in user
     const chats = await Chat.find({
       $or: [
         { senderId: loggedInUserId, receiverId },
@@ -204,3 +220,12 @@ exports.receiveChats = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.sendPost =async(req,res)=>{
+  const {post_text} = req.body
+  try {
+    
+  } catch (error) {
+    console.log(error);
+  }
+}

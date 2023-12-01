@@ -26,7 +26,7 @@ export default function UserNames() {
             Authorization: `Bearer ${token}`,
           },
         });
-
+ 
         setUsernames(response.data.usernames);
         console.log(response.data.usernames); // Update this line to log the response data directly
       } catch (error) {

@@ -48,7 +48,7 @@ export default function UpdatePage() {
                 Update Profile
             </Text>
             <TextInput
-                style={{ height: 40, width: width / 1.2, margin: 10, padding: 10, borderBottomWidth: 2, borderBottomColor: text_color, fontSize: 18,color:'#FFF5EE' }}
+                style={{ height: 40, width: width / 1.2, margin: 10, padding: 10, borderBottomWidth: 2, borderBottomColor: text_color, fontSize: 18,color: text_color }}
                 placeholder="Enter New Username"
                 placeholderTextColor={text_color}
                 cursorColor={text_color}
@@ -56,7 +56,7 @@ export default function UpdatePage() {
                 onChangeText={handleuserNameChange}
             />
             <TextInput
-                style={{ height: 40, width: width / 1.2, margin: 10, padding: 10, borderBottomWidth: 2, borderBottomColor: text_color, fontSize: 18,color:'#FFF5EE' }}
+                style={{ height: 40, width: width / 1.2, margin: 10, padding: 10, borderBottomWidth: 2, borderBottomColor: text_color, fontSize: 18,color: text_color}}
                 placeholder="Enter New Password"
                 placeholderTextColor={text_color}
                 cursorColor={text_color}
