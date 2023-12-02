@@ -4,6 +4,7 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model')
 const Chat = require('../Models/chat.model')
+const Post = require('../Models/post.model')
 const multer = require('multer');
 
 // Configure Cloudinary with your API key, API secret, and cloud name
@@ -221,11 +222,66 @@ exports.receiveChats = async (req, res) => {
   }
 };
 
-exports.sendPost =async(req,res)=>{
-  const {post_text} = req.body
+// controllers/user.controller.js
+
+exports.sendPost = async (req, res) => {
+  const { postText } = req.body;
+
   try {
-    
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Create a new post
+    const newPost = new Post({
+      userId: loggedInUserId,
+      postText,
+      // Add other fields as needed
+    });
+
+    // Save the post to the database
+    await newPost.save();
+
+    // Update the user's posts array with the newly created post ID
+    await User.findByIdAndUpdate(loggedInUserId, { $push: { posts: newPost._id } });
+
+    // Respond with a success message or the newly created post
+    res.json({ message: 'Post sent successfully', post: newPost });
   } catch (error) {
-    console.log(error);
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
   }
-}
+};
+
+// controllers/user.controller.js
+
+exports.receivePosts = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Fetch posts for the logged-in user
+    const posts = await Post.find({ userId: loggedInUserId });
+
+    // Respond with the posts
+    res.json(posts);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};

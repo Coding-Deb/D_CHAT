@@ -76,7 +76,7 @@ export default function TopTab({ page }) {
             Posts
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
-            <Pressable style={{ marginHorizontal: 7, backgroundColor: '#D3D3D3', borderRadius: 50 }}>
+            <Pressable style={{ marginHorizontal: 7, backgroundColor: '#D3D3D3', borderRadius: 50 }} onPress={()=>{navigation.navigate('Posts')}}>
               <Entypo name="plus" size={32} color={text_color} />
             </Pressable>
             <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>

@@ -15,7 +15,7 @@ export default function ChatPage() {
   const Route = useRoute()
   const [username, setUsername] = useState('');
   const [chat, setChat] = useState('');
-  const [getchat, setGetchat] = useState('');
+  const [getchat, setGetchat] = useState([]);
   const id = Route.params.id
   useEffect(() => {
     // Fetch the username using the token
@@ -36,64 +36,29 @@ export default function ChatPage() {
         // Handle errors as needed
       }
     };
-
-    // const fetchChat = async () => {
-    //       try {
-    //         const token = await AsyncStorage.getItem('token'); // Replace with the actual token
-
-    //         // Make a request to your server's endpoint
-    //         const response = await axios.get("http://192.168.157.210:5000/api/auth/get_chats", {
-    //           senderId: username,
-    //           receiverId: id,
-    //         }, {
-    //           headers: {
-    //             Authorization: `Bearer ${token}`,
-    //           },
-    //         });
-
-    //         setGetchat(response.data.message);
-    //       } catch (error) {
-    //         console.error('Error fetching username:', error.message);
-    //         // Handle errors as needed
-    //       }
-    //     };
-
-
-    // // Assuming you are calling this function in a component or wherever needed
-    // const getChats = async () => {
-    //   try {
-    //     // Replace 'YOUR_API_ENDPOINT' with the actual endpoint
-    //     const apiUrl = 'http://192.168.157.210:5000/api/auth/get_chats';
-    
-    //     // Assuming you have the senderId and receiverId stored in some variables
-    //     const senderId = username;
-    //     const receiverId = id;
-    
-    //     // Assuming you have the authentication token stored in some variable
-    //     const authToken = await AsyncStorage.getItem('token'); // Replace with the actual token
-    
-    //     // Make a POST request to fetch chats
-    //     const response = await axios.post(
-    //       apiUrl,
-    //       { senderId, receiverId },
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${authToken}`,
-    //           'Content-Type': 'application/json',
-    //         },
-    //       }
-    //     );
-    
-    //     // Handle the response data here
-    //     console.log('Chats:', response.data);
-    //   } catch (error) {
-    //     // Handle errors here
-    //     console.error('Error fetching chats:', error);
-    //   }
-    // };
     
     // Call the function to fetch chats when needed
-    
+  //   const fetchChat = async () => {
+  //     try {
+  //         // Get the user's token from AsyncStorage
+  //         const token = await AsyncStorage.getItem('token');
+
+  //         // Make a GET request to your API endpoint to fetch post data
+  //         const response = await axios.get('http://192.168.157.210:5000/api/auth/get_chats',{
+  //           senderId: username,
+  //           receiverId: id
+  //         }, {
+  //             headers: {
+  //                 Authorization: `Bearer ${token}`,
+  //             },
+  //         });
+
+  //         // Set the fetched post data in the state
+  //         setGetchat(response.data);
+  //     } catch (error) {
+  //         console.error('Error fetching post data:', error);
+  //     }
+  // };
     
     
     // Call the fetchUsername function when the component mounts
@@ -124,6 +89,9 @@ export default function ChatPage() {
         <Text style={{ fontSize: 18, color: '#333' }}>
           {username}
         </Text>
+        {getchat.map((post) => (
+                <Text key={post._id}>{post.mesage}</Text>
+            ))}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginHorizontal: 15 }}>
         <TextInput

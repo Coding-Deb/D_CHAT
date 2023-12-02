@@ -11,6 +11,8 @@ router.get('/get_chats', authController.receiveChats);
 router.get('/login',authController.getUsernameFromToken)
 router.get('/users',authController.getAllUsernamesExceptLoggedInUser)
 router.put('/update',authController.updateUserNamePassword)
+router.post('/send_post',authController.sendPost)
+router.get('/receive_post',authController.receivePosts)
 
-
+ 
 module.exports = router;
