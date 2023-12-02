@@ -13,6 +13,7 @@ router.get('/users',authController.getAllUsernamesExceptLoggedInUser)
 router.put('/update',authController.updateUserNamePassword)
 router.post('/send_post',authController.sendPost)
 router.get('/receive_post',authController.receivePosts)
+router.get('/receive_all_post',authController.receiveAllPosts)
 
  
 module.exports = router;

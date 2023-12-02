@@ -79,12 +79,12 @@ export default function PostPage() {
     return (
         <View style={[styles.container, { backgroundColor: background_color }]}>
             <Text style={{ fontSize: 30, color: text_color, fontWeight: 'bold', marginVertical: 15 }}>
-                Update Profile
+                Send Post
             </Text>
             <View style={{ height:130, width: width / 1.2 , borderRadius:22, backgroundColor:'red' }}>
             <TextInput
-                style={{ height:130, width: width / 1.2 ,  padding: 10, borderRadius:22, fontSize: 18, color: text_color , backgroundColor:'#DCDCDC' }}
-                placeholder="Enter New Username"
+                style={{ height:130, width: width / 1.2 , paddingHorizontal: 10, borderRadius:22, fontSize: 18, color: text_color , backgroundColor:'#DCDCDC' }}
+                placeholder="Enter New Thought"
                 multiline= {true}
                 placeholderTextColor={text_color}
                 cursorColor={text_color}

@@ -38,7 +38,7 @@ export default function Register() {
       isValid = false;
     } else {
       setEmailError('');
-    } 
+    }
 
     // Password validation
     if (!password || password.length < 6) {
@@ -71,7 +71,7 @@ export default function Register() {
       }
     }
   };
-  
+
 
   return (
     <View style={styles.container}>
@@ -108,7 +108,13 @@ export default function Register() {
       <Button
         title="Already have an account? Sign In"
         type="clear"
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => {
+          setUsername('')
+          setEmail('')
+          setPassword('')
+          setConfirmPassword('')
+          navigation.navigate('Login')
+        }}
       />
     </View>
   );

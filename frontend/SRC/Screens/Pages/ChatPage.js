@@ -36,36 +36,15 @@ export default function ChatPage() {
         // Handle errors as needed
       }
     };
-    
-    // Call the function to fetch chats when needed
-  //   const fetchChat = async () => {
-  //     try {
-  //         // Get the user's token from AsyncStorage
-  //         const token = await AsyncStorage.getItem('token');
 
-  //         // Make a GET request to your API endpoint to fetch post data
-  //         const response = await axios.get('http://192.168.157.210:5000/api/auth/get_chats',{
-  //           senderId: username,
-  //           receiverId: id
-  //         }, {
-  //             headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //             },
-  //         });
 
-  //         // Set the fetched post data in the state
-  //         setGetchat(response.data);
-  //     } catch (error) {
-  //         console.error('Error fetching post data:', error);
-  //     }
-  // };
-    
-    
+
     // Call the fetchUsername function when the component mounts
     fetchUsername();
     // getChats();
-      // fetchChat()
-    }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+    // fetchChat()
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+
 
 
   const sendChat = async () => {
@@ -90,8 +69,8 @@ export default function ChatPage() {
           {username}
         </Text>
         {getchat.map((post) => (
-                <Text key={post._id}>{post.mesage}</Text>
-            ))}
+          <Text key={post._id}>{post.mesage}</Text>
+        ))}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginHorizontal: 15 }}>
         <TextInput

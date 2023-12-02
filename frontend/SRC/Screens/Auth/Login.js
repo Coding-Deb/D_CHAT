@@ -80,7 +80,11 @@ export default function Login() {
       <Button
         title="Don't have an account? Sign Up"
         type="clear"
-        onPress={() => navigation.navigate('Register')}
+        onPress={() => {
+          setEmail('')
+          setPassword('')
+          navigation.navigate('Register')
+        }}
       />
     </View>
   );

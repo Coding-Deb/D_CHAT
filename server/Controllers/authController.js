@@ -274,10 +274,10 @@ exports.receivePosts = async (req, res) => {
     const loggedInUserId = decodedToken.userId;
 
     // Fetch posts for the logged-in user
-    const posts = await Post.find({ userId: loggedInUserId });
+    const posts = await Post.find({ userId: loggedInUserId }).populate('userId', 'username');
 
     // Respond with the posts
-    res.json(posts);
+    res.json({posts});
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
@@ -285,3 +285,15 @@ exports.receivePosts = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' + error });
   }
 };
+
+exports.receiveAllPosts = async (req,res)=>{
+  try {
+    const posts = await Post.find().populate('userId', 'username');
+    res.json({posts})
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+}
