@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      img: img_url // Save the image URL in the user object
+      
     });
 
     await user.save();
@@ -213,7 +213,7 @@ exports.receiveChats = async (req, res) => {
     });
 
     // Respond with the chats
-    res.json(chats);
+    res.send({chats:chats});
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
