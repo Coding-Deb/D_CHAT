@@ -12,8 +12,8 @@ export default function ChatsCards({ senderId, receiverId }) {
         const token = await AsyncStorage.getItem('token');
         const response = await axios.get('http://192.168.157.210:5000/api/auth/receiveChats', {
           params: {
-            senderId: '656ac7e03b6af8bd981d36d6',
-            receiverId: '656b22149373873b96351abc',
+            senderId: senderId,
+            receiverId: '656ac7e03b6af8bd981d36d6',
           },
           headers: {
             Authorization: `Bearer ${token}`,
@@ -21,7 +21,7 @@ export default function ChatsCards({ senderId, receiverId }) {
         });
 
         setChats(response.data.chats);
-        console.log(response.data);
+
       } catch (error) {
         console.error('Error fetching chats:', error.message);
       }
@@ -32,17 +32,19 @@ export default function ChatsCards({ senderId, receiverId }) {
 
   return (
     <View>
-      {/* {
-        chats.map((item) => {
-          return (
+      {
+        chats && chats.length > 0 ? (
+          chats.map((item) => (
             <View key={item._id}>
               <Text>
                 {item.message}
               </Text>
             </View>
-          );
-        })
-      } */}
+          ))
+        ) : (
+          <Text>No chats available</Text>
+        )
+      }
     </View>
   );
 }

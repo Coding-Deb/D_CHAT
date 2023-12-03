@@ -3,19 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 5000
-// const multer = require('multer');
-// const cloudinary = require('cloudinary').v2;
-
-// // Cloudinary Configuration
-// cloudinary.config({ 
-//   cloud_name: 'dbbjsrztd', 
-//   api_key: '665347456443981', 
-//   api_secret: 'GVmkrVkTkuhiH8qX8HNsaJ7PXSc' 
-// });
-
-// // Multer Configuration
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
+const http = require('http');
+const socketIo = require('socket.io');
 
 
 // MongoDB Connection
@@ -31,6 +20,20 @@ connection.once('open', () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Handle real-time events here
+  // Example: socket.on('someEvent', (data) => { /* Handle event */ });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
 
 const authRoutes = require('./Routes/authRoutes');
 app.use('/api/auth', authRoutes);

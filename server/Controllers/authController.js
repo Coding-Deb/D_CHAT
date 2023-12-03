@@ -213,7 +213,10 @@ exports.receiveChats = async (req, res) => {
     });
 
     // Respond with the chats
-    res.send({chats:chats});
+    chats.forEach(chat => {
+      console.log(chat.message);
+    });
+    // res.send({chats:chats});
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });

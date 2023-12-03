@@ -44,18 +44,29 @@ export default function ChatPage() {
 
   const sendChat = async () => {
     try {
-      await axios.post('http://192.168.157.210:5000/api/auth/send_chat', {
-        senderId: username,
-        receiverId: id,
-        message: chat,
-      });
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.post(
+        'http://192.168.157.210:5000/api/auth/send_chat',
+        {
+          senderId: username.logged_id, // Assuming username.logged_id is the correct senderId
+          receiverId: id,
+          message: chat,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
       setChat('');
-      // After sending the chat, fetch the updated chats
+      // After sending the chat, fetch the updated chats if needed
       // fetchChats();
     } catch (error) {
       console.error('Chat Send failed:', error);
     }
   };
+  
 
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
