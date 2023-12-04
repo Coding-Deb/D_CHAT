@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      
+
     });
 
     await user.save();
@@ -213,10 +213,7 @@ exports.receiveChats = async (req, res) => {
     });
 
     // Respond with the chats
-    chats.forEach(chat => {
-      console.log(chat.message);
-    });
-    // res.send({chats:chats});
+    res.json({ chats });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
@@ -224,6 +221,7 @@ exports.receiveChats = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // controllers/user.controller.js
 
@@ -280,7 +278,7 @@ exports.receivePosts = async (req, res) => {
     const posts = await Post.find({ userId: loggedInUserId }).populate('userId', 'username');
 
     // Respond with the posts
-    res.json({posts});
+    res.json({ posts });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
@@ -289,10 +287,10 @@ exports.receivePosts = async (req, res) => {
   }
 };
 
-exports.receiveAllPosts = async (req,res)=>{
+exports.receiveAllPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate('userId', 'username');
-    res.json({posts})
+    res.json({ posts })
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
@@ -300,3 +298,29 @@ exports.receiveAllPosts = async (req,res)=>{
     res.status(500).json({ error: 'Internal Server Error' + error });
   }
 }
+exports.search = async (req, res) => {
+  try {
+    const { query } = req.params;
+
+    // Search for users with matching username
+    const userResults = await User.find({ username: { $regex: query, $options: 'i' } });
+
+    // Search for posts with matching text
+    const postResults = await Post.find({ postText: { $regex: query, $options: 'i' } })
+      .populate('userId', 'username');
+
+    // Search for chats with matching message
+    const chatResults = await Chat.find({ message: { $regex: query, $options: 'i' } })
+      .populate('senderId', 'username') // Populate senderId with username
+      .populate('receiverId', 'username'); // Populate receiverId with username
+
+    const alldata = [...userResults,...chatResults,...postResults]
+    // res.json({ userResults, postResults, chatResults });
+    res.json({userResults:userResults,chatResults:chatResults,postResults:postResults})
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};

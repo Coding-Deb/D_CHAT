@@ -24,11 +24,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const server = http.createServer(app);
 const io = socketIo(server);
 
+console.log(server);
+
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  // Handle real-time events here
-  // Example: socket.on('someEvent', (data) => { /* Handle event */ });
+  // Example: Sending a real-time message to the client
+  socket.emit('message', 'Hello from server');
 
   socket.on('disconnect', () => {
     console.log('User disconnected');

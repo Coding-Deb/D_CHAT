@@ -15,6 +15,6 @@ router.post('/send_post',authController.sendPost)
 router.get('/receive_post',authController.receivePosts)
 router.get('/receive_all_post',authController.receiveAllPosts)
 router.delete('/delete_post',authController.receiveAllPosts)
-
+router.get('/search/:query',authController.search)
  
 module.exports = router;
