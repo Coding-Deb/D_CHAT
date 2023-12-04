@@ -18,6 +18,7 @@ export default function ChatPage() {
   const [chat, setChat] = useState('');
   const [chats, setChats] = useState([]);
   const id = Route.params.id;
+  const Username = Route.params.username;
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -70,13 +71,13 @@ export default function ChatPage() {
 
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
-      <TopTab page={'Chat'} />
+      <TopTab page={'Chat'} name={Username} />
       <View style={{ backgroundColor: '#DCDCDC', padding: 20, marginVertical: 10, borderRadius: 10 }}>
         <Text style={{ fontSize: 18, color: '#333' }}>
-          {username.logged_id}
+          {username.username}
         </Text>
          <Text style={{ fontSize: 18, color: '#333' }}>
-          {id}
+          {Username}
         </Text>
         
         <ChatsCards senderId={username.logged_id} receiverId={id}/>

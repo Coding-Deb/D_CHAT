@@ -49,7 +49,7 @@ export default function UserNames() {
             data={usernames}
             renderItem={({ item }) => {
               return (
-                <Pressable key={item._id} style={{ marginVertical: 10, borderBottomColor: 'grey', borderBottomWidth: 0.5, justifyContent: 'center' }} onPress={() => { navigation.navigate('Chat',{id: item._id}) }}>
+                <Pressable key={item._id} style={{ marginVertical: 10, borderBottomColor: 'grey', borderBottomWidth: 0.5, justifyContent: 'center' }} onPress={() => { navigation.navigate('Chat',{id: item._id,username: item.username}) }}>
                   <Text style={{ fontSize: 18, fontWeight: '800', color: text_color, margin: 12 }}>
                     {item.username}
                   </Text>

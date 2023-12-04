@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 
-export default function TopTab({ page }) {
+export default function TopTab({ page , name }) {
   const { background_color, text_color, showVisible } = useContext(Context);
   const navigation = useNavigation()
   const handleLogout = async () => {
@@ -100,6 +100,13 @@ export default function TopTab({ page }) {
           </Text>
         </View>
       ) : null}
+      {page === 'Profile' ? (
+        <View style={styles.topbar}>
+          <Text style={[styles.text, { color: text_color }]}>
+            Profile
+          </Text>
+        </View>
+      ) : null}
       {page === 'Users' ? (
         <View style={styles.topbar}>
           <Text style={[styles.text, { color: text_color }]}>
@@ -112,8 +119,8 @@ export default function TopTab({ page }) {
       ) : null}
       {page === 'Chat' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
-            Tridip
+          <Text style={[styles.text, { color: text_color }]} onPress={()=>{navigation.navigate('userProfile',{name: name})}}>
+            {name}
           </Text>
           <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
               <Entypo name='phone' size={27} color={text_color} />

@@ -13,6 +13,14 @@ const userSchema = new Schema({
     posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Post'
+    }],
+    following:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    followers:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }]
 });
 

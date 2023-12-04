@@ -324,3 +324,95 @@ exports.search = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' + error });
   }
 };
+
+exports.followUser = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Extract the user ID to follow from the request parameters
+    const { userIdToFollow } = req.params;
+
+    // Check if the user to follow exists
+    const userToFollow = await User.findById(userIdToFollow);
+    if (!userToFollow) {
+      return res.status(404).json({ error: 'User to follow not found' });
+    }
+
+    // Check if the user is already following the target user
+    if (loggedInUserId === userIdToFollow) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+
+    // Check if the user is already following the target user
+    const isFollowing = loggedInUser.following.includes(userIdToFollow);
+    if (isFollowing) {
+      return res.status(400).json({ error: 'You are already following this user' });
+    }
+
+    // Update the logged-in user's following array with the target user's ID
+    await User.findByIdAndUpdate(loggedInUserId, { $push: { following: userIdToFollow } });
+
+    // Update the target user's followers array with the logged-in user's ID
+    await User.findByIdAndUpdate(userIdToFollow, { $push: { followers: loggedInUserId } });
+
+    res.json({ message: 'User followed successfully' });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};
+
+exports.getFollowers = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Fetch the logged-in user's followers
+    const followers = await User.findById(loggedInUserId, 'followers').populate('followers', 'username');
+
+    res.json({ followers: followers.followers });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};
+
+exports.getFollowing = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Fetch the logged-in user's following
+    const following = await User.findById(loggedInUserId, 'following').populate('following', 'username');
+
+    res.json({ following: following.following });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};

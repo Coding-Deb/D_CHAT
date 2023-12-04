@@ -21,17 +21,17 @@ export default function AboutPage() {
   const [username, setUsername] = useState(null);
   const [imageUri, setImageUri] = useState(null);
   const navigation = useNavigation()
-  
 
-   // Function to open the image picker
-   const pickImage = async () => {
+
+  // Function to open the image picker
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-  
+
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
       setImageUri(imageUri);
@@ -39,7 +39,7 @@ export default function AboutPage() {
       // You can use 'imageUri' elsewhere in your code as needed
     }
   };
-  
+
 
   useEffect(() => {
     // Fetch the username using the token
@@ -84,9 +84,9 @@ export default function AboutPage() {
           <Text style={[styles.desc, { color: text_color }]}>Hey I am using D CHAT </Text>
 
         </View>
-        <View style={[styles.colcontent, ]}>
+        <View style={[styles.colcontent,]}>
           <Switch onChange={changeColor} value={open} color={text_color} />
-          <Pressable onPress={()=>{navigation.navigate('Update')}}>
+          <Pressable onPress={() => { navigation.navigate('Update') }}>
             <FontAwesome name='edit' color={text_color} size={25} />
           </Pressable>
         </View>
@@ -109,7 +109,26 @@ export default function AboutPage() {
             </Text>
           </View>
         </BottomSheet> */}
-        
+        <View style={[styles.showfollow, { backgroundColor: background_color,shadowColor: text_color }]}>
+          <View style={styles.folloing}>
+            <Text style={[styles.text, { color: text_color }]}>
+              Following
+            </Text>
+            <Text style={[styles.text, { color: text_color }]}>
+              25
+            </Text>
+          </View>
+          <View style={{ width: 2, backgroundColor: text_color }}></View>
+          <View style={styles.folloing}>
+            <Text style={[styles.text, { color: text_color }]}>
+              Following
+            </Text>
+            <Text style={[styles.text, { color: text_color }]}>
+              25
+            </Text>
+          </View>
+
+        </View>
       </View>
       <BottomTab page={'About'} />
     </View>
@@ -170,8 +189,8 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopLeftRadius:22,
-    borderTopRightRadius:22,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
   },
   bottomsheettitle: {
     fontSize: 22,
@@ -188,7 +207,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#305F96',
     fontSize: 18
-  }, 
+  },
   bottomsheetbtn: {
     // backgroundColor: '#305F96',
     borderRadius: 14,
@@ -201,7 +220,7 @@ const styles = StyleSheet.create({
     color: '#305F96',
     textAlign: 'center',
     fontWeight: 'bold',
-    
+
   },
   bottomsheetbtncancel: {
     color: '#D22B2B',
@@ -209,5 +228,34 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: '600'
   },
+  text: {
+    fontSize: 15,
+    fontWeight: '700',
+},
+headerName: {
+    fontSize: 24,
+    fontWeight: '700',
+},
+
+showfollow: {
+    width: width / 1.6,
+    borderRadius: 25,
+    paddingVertical: 13,
+    marginTop: 10,
+    elevation: 6,
+    shadowOffset: { width: -8, height: -7 },
+    shadowOpacity: 0.9,
+    // backgroundColor:"#FFF",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
+},
+folloing: {
+    // backgroundColor:'green',
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8
+},
 
 })
