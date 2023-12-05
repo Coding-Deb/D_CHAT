@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 
-export default function TopTab({ page , name }) {
+export default function TopTab({ page, name, id }) {
   const { background_color, text_color, showVisible } = useContext(Context);
   const navigation = useNavigation()
   const handleLogout = async () => {
@@ -76,7 +76,7 @@ export default function TopTab({ page , name }) {
             Posts
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
-            <Pressable style={{ marginHorizontal: 7, borderRadius: 50 }} onPress={()=>{navigation.navigate('Posts')}}>
+            <Pressable style={{ marginHorizontal: 7, borderRadius: 50 }} onPress={() => { navigation.navigate('Posts') }}>
               <Feather name="plus-circle" size={32} color={text_color} />
             </Pressable>
             <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
@@ -113,21 +113,21 @@ export default function TopTab({ page , name }) {
             All Users
           </Text>
           <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
-              <Entypo name='magnifying-glass' size={27} color={text_color} />
-            </Pressable>
+            <Entypo name='magnifying-glass' size={27} color={text_color} />
+          </Pressable>
         </View>
       ) : null}
       {page === 'Chat' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]} onPress={()=>{navigation.navigate('userProfile',{name: name})}}>
+          <Text style={[styles.text, { color: text_color }]} onPress={() => { navigation.navigate('userProfile', { name: name, id: id }) }}>
             {name}
           </Text>
           <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
-              <Entypo name='phone' size={27} color={text_color} />
-            </Pressable>
+            <Entypo name='phone' size={27} color={text_color} />
+          </Pressable>
         </View>
       ) : null}
-      
+
 
     </View>
   );

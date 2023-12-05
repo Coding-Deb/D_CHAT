@@ -17,6 +17,7 @@ router.get('/receive_all_post',authController.receiveAllPosts)
 router.delete('/delete_post',authController.receiveAllPosts)
 router.get('/search/:query',authController.search)
 router.post('/follow/:userIdToFollow',authController.followUser)
+router.post('/unfollow/:userIdToUnfollow',authController.unfollowUser)
 router.get('/getfollowing',authController.getFollowing)
 router.get('/getfollower',authController.getFollowers)
  

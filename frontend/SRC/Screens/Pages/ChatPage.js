@@ -71,7 +71,7 @@ export default function ChatPage() {
 
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
-      <TopTab page={'Chat'} name={Username} />
+      <TopTab page={'Chat'} name={Username} id={id} />
       <View style={{ backgroundColor: '#DCDCDC', padding: 20, marginVertical: 10, borderRadius: 10 }}>
         <Text style={{ fontSize: 18, color: '#333' }}>
           {username.username}

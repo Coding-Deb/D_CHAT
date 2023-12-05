@@ -16,10 +16,12 @@ const height = Dimensions.get('screen').height
 const width = Dimensions.get('screen').width
 
 export default function AboutPage() {
-  const { background_color, text_color, changeColor, open, settingsColor, showVisible, isVisible } = useContext(Context)
+  const { background_color, text_color, changeColor, open, } = useContext(Context)
   // const [userName, setUserName] = useState('');
   const [username, setUsername] = useState(null);
   const [imageUri, setImageUri] = useState(null);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const navigation = useNavigation()
 
 
@@ -41,26 +43,64 @@ export default function AboutPage() {
   };
 
 
-  useEffect(() => {
-    // Fetch the username using the token
-    const fetchUsername = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token'); // Replace with the actual token
+  // Fetch the username using the token
+  const fetchUsername = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Replace with the actual token
 
-        // Make a request to your server's endpoint
-        const response = await axios.get('http://192.168.157.210:5000/api/auth/login', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      // Make a request to your server's endpoint
+      const response = await axios.get('http://192.168.157.210:5000/api/auth/login', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        setUsername(response.data.username);
-      } catch (error) {
-        console.error('Error fetching username:', error.message);
-        // Handle errors as needed
-      }
-    };
+      setUsername(response.data.username);
+    } catch (error) {
+      console.error('Error fetching username:', error.message);
+      // Handle errors as needed
+    }
+  };
+  const getFollowing = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(
+            `http://192.168.157.210:5000/api/auth/getfollowing`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        setFollowingCount(response.data.following.length);
+        console.log(response.data.following.length);
+    } catch (error) {
+        console.error('Axios error:', error);
+    }
+};
 
+const getFollowers = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(
+            `http://192.168.157.210:5000/api/auth/getfollower`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        setFollowerCount(response.data.followers.length);
+        console.log(response.data.followers.length);
+    } catch (error) {
+        console.error('Axios error:', error);
+    }
+};
+
+
+useEffect(() => {
+    getFollowing(); 
+    getFollowers()
     // Call the fetchUsername function when the component mounts
     fetchUsername();
   }, []); // The empty dependency array ensures that this effect runs once when the component mounts
@@ -112,10 +152,10 @@ export default function AboutPage() {
         <View style={[styles.showfollow, { backgroundColor: background_color,shadowColor: text_color }]}>
           <View style={styles.folloing}>
             <Text style={[styles.text, { color: text_color }]}>
-              Following
+              Follower
             </Text>
             <Text style={[styles.text, { color: text_color }]}>
-              25
+            {followerCount}
             </Text>
           </View>
           <View style={{ width: 2, backgroundColor: text_color }}></View>
@@ -124,7 +164,7 @@ export default function AboutPage() {
               Following
             </Text>
             <Text style={[styles.text, { color: text_color }]}>
-              25
+              {followingCount}
             </Text>
           </View>
 

@@ -8,10 +8,7 @@ const Statedata = (props) => {
     const [open, setOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isliked, setIsliked] = useState(false);
-    const [isfollow, setIsfollow] = useState(true);
-    const changfollow = () => {
-        setIsfollow(!isfollow)
-    }
+    const [isFollowing, setIsFollowing] = useState(false);
     const changeColor = () => {
         if (background_color === '#F3F2ED') {
             setBackground_color('#1B1B1B')
@@ -25,14 +22,17 @@ const Statedata = (props) => {
             setOpen(false)
         }
     }
-    const showVisible = ()=>{
+    const showVisible = () => {
         setIsVisible(!isVisible)
     }
-    const ShowLiked = ()=>{
+    const ShowLiked = () => {
         setIsliked(!isliked)
     }
+    const changfollow = () => {
+        setIsFollowing((prevFollow) => !prevFollow);
+      };
     return (
-        <Context.Provider value={{ background_color, text_color, changeColor, open, settingsColor,isfollow,changfollow , showVisible, isVisible , isliked, ShowLiked}}>
+        <Context.Provider value={{ background_color, text_color, changeColor, open, settingsColor, isFollowing,changfollow, setIsFollowing, showVisible, isVisible, isliked, ShowLiked }}>
             {props.children}
         </Context.Provider>
     )

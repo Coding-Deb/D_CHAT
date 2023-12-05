@@ -114,7 +114,7 @@ export default function SearchPage() {
         {searchText != '' ?
           userdata.map((item) => {
             return (
-              <Pressable key={item._id} style={[styles.mapdata, { backgroundColor: '#800020' }]} onPress={() => { navigation.navigate('userProfile', { name: item.username }) }}>
+              <Pressable key={item._id} style={[styles.mapdata, { backgroundColor: '#800020' }]} onPress={() => { navigation.navigate('userProfile', { name: item.username,id: item._id }) }}>
                 <Text style={[styles.cardtextfetch, { color: 'white' }]}>
                   {item.username}
                 </Text>

@@ -351,7 +351,11 @@ exports.followUser = async (req, res) => {
     }
 
     // Check if the user is already following the target user
-    const isFollowing = loggedInUser.following.includes(userIdToFollow);
+    const isFollowing = await User.findOne({
+      _id: loggedInUserId,
+      following: { $in: [userIdToFollow] }
+    });
+
     if (isFollowing) {
       return res.status(400).json({ error: 'You are already following this user' });
     }
@@ -409,6 +413,58 @@ exports.getFollowing = async (req, res) => {
     const following = await User.findById(loggedInUserId, 'following').populate('following', 'username');
 
     res.json({ following: following.following });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};
+
+// controllers/user.controller.js
+
+exports.unfollowUser = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Extract the user ID to unfollow from the request parameters
+    const { userIdToUnfollow } = req.params;
+
+    // Check if the user to unfollow exists
+    const userToUnfollow = await User.findById(userIdToUnfollow);
+    if (!userToUnfollow) {
+      return res.status(404).json({ error: 'User to unfollow not found' });
+    }
+
+    // Check if the user is trying to unfollow themselves
+    if (loggedInUserId === userIdToUnfollow) {
+      return res.status(400).json({ error: 'You cannot unfollow yourself' });
+    }
+
+    // Check if the user is currently following the target user
+    const isFollowing = await User.findOne({
+      _id: loggedInUserId,
+      following: { $in: [userIdToUnfollow] }
+    });
+
+    if (!isFollowing) {
+      return res.status(400).json({ error: 'You are not following this user' });
+    }
+
+    // Remove the target user's ID from the logged-in user's following array
+    await User.findByIdAndUpdate(loggedInUserId, { $pull: { following: userIdToUnfollow } });
+
+    // Remove the logged-in user's ID from the target user's followers array
+    await User.findByIdAndUpdate(userIdToUnfollow, { $pull: { followers: loggedInUserId } });
+
+    res.json({ message: 'User unfollowed successfully' });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });
