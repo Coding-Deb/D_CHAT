@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model')
 const Chat = require('../Models/chat.model')
 const Post = require('../Models/post.model')
+const Notification = require('../Models/notification.model')
 const multer = require('multer');
 
 // Configure Cloudinary with your API key, API secret, and cloud name
@@ -180,6 +181,8 @@ exports.sendChat = async (req, res) => {
     // Push the chat message to the sender's and receiver's data
     await User.findByIdAndUpdate(senderId, { $push: { chats: newChat._id } });
     await User.findByIdAndUpdate(receiverId, { $push: { chats: newChat._id } });
+
+    this.sendNotification(receiverId, `${senderId} sent you a chat`)
     res.json({ msg: 'Sent' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -250,6 +253,12 @@ exports.sendPost = async (req, res) => {
 
     // Update the user's posts array with the newly created post ID
     await User.findByIdAndUpdate(loggedInUserId, { $push: { posts: newPost._id } });
+
+    // Send a notification to followers
+    const followers = await User.findById(loggedInUserId, 'followers');
+    followers.followers.forEach(followerId => {
+      this.sendNotification(followerId, `${loggedInUserId} posted a new post`)
+    });
 
     // Respond with a success message or the newly created post
     res.json({ message: 'Post sent successfully', post: newPost });
@@ -465,6 +474,76 @@ exports.unfollowUser = async (req, res) => {
     await User.findByIdAndUpdate(userIdToUnfollow, { $pull: { followers: loggedInUserId } });
 
     res.json({ message: 'User unfollowed successfully' });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token has expired' });
+    }
+    res.status(500).json({ error: 'Internal Server Error' + error });
+  }
+};
+
+exports.sendNotification = async (userId, message) => {
+  try {
+    const newNotification = new Notification({
+      userId,
+      message,
+    });
+
+    await newNotification.save();
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
+};
+
+exports.getNotifications = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Extract userId from the request parameters
+
+    // Fetch unread notifications for the user
+    const notifications = await Notification.find({ userId, isRead: false });
+
+    // Mark fetched notifications as read
+    await Notification.updateMany({ userId, isRead: false }, { isRead: true });
+
+    res.json({ notifications });
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.checkIfUserIsFollowing = async (req, res) => {
+  try {
+    // Extract the token from the request headers or wherever it's stored
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    const decodedToken = jwt.verify(token, 'Debanshu');
+
+    // Fetch the logged-in user based on the decoded token
+    const loggedInUserId = decodedToken.userId;
+
+    // Extract the user ID to check from the request parameters
+    const { userIdToCheck } = req.params;
+
+    // Check if the user to check exists
+    const userToCheck = await User.findById(userIdToCheck);
+    if (!userToCheck) {
+      return res.status(404).json({ error: 'User to check not found' });
+    }
+
+    // Check if the user is trying to check themselves
+    if (loggedInUserId === userIdToCheck) {
+      return res.status(400).json({ error: 'You cannot check yourself' });
+    }
+
+    // Check if the user is currently following the target user
+    const isFollowing = await User.findOne({
+      _id: loggedInUserId,
+      following: { $in: [userIdToCheck] }
+    });
+
+    res.json({ isFollowing: isFollowing });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token has expired' });

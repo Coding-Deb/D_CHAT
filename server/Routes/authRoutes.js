@@ -20,5 +20,7 @@ router.post('/follow/:userIdToFollow',authController.followUser)
 router.post('/unfollow/:userIdToUnfollow',authController.unfollowUser)
 router.get('/getfollowing',authController.getFollowing)
 router.get('/getfollower',authController.getFollowers)
+router.get('/checkFollowing/:userIdToCheck',authController.checkIfUserIsFollowing)
+router.get('/:userId', authController.getNotifications);
  
 module.exports = router;

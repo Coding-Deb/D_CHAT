@@ -10,34 +10,62 @@ const width = Dimensions.get('screen').width;
 
 export default function ProfileScreen() {
     const Route = useRoute()
-    const { text_color, background_color,changfollow, isFollowing} = useContext(Context)
+    const { text_color, background_color, changfollow, isFollowing } = useContext(Context)
     const [followerCount, setFollowerCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
+
+    const checkIfUserIsFollowing = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const userIdToCheck = Route.params.id;
+            const response = await axios.get(
+                `http://192.168.157.210:5000/api/auth/checkfollowing/${userIdToCheck}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const { isFollowing } = response.data;
+            changfollow(isFollowing); // Call changfollow to update the isFollowing state
+            console.log(response.data);
+        } catch (error) {
+            console.error('Axios error:', error);
+        }
+    };
+    // Call checkIfUserIsFollowing in useEffect
+    useEffect(() => {
+        getFollowing();
+        getFollowers();
+        checkIfUserIsFollowing(); // Add this line to check if the user is following when the component mounts
+    }, []);
+    // Modify the handleFollow function
     const handleFollow = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
             const userIdToFollow = Route.params.id;
             const response = isFollowing
                 ? await axios.post(
-                      `http://192.168.157.210:5000/api/auth/unfollow/${userIdToFollow}`,
-                      {},
-                      {
-                          headers: {
-                              Authorization: `Bearer ${token}`,
-                          },
-                      }
-                  )
+                    `http://192.168.157.210:5000/api/auth/unfollow/${userIdToFollow}`,
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
                 : await axios.post(
-                      `http://192.168.157.210:5000/api/auth/follow/${userIdToFollow}`,
-                      {},
-                      {
-                          headers: {
-                              Authorization: `Bearer ${token}`,
-                          },
-                      }
-                  );
+                    `http://192.168.157.210:5000/api/auth/follow/${userIdToFollow}`,
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
 
-            changfollow(); // Call changfollow to update the isFollowing state
+            changfollow(!isFollowing); // Call changfollow to update the isFollowing state by toggling its value
             console.log(response.data);
             // You might want to update the follower count here or trigger a refresh
             getFollowing();
@@ -80,12 +108,7 @@ export default function ProfileScreen() {
             console.error('Axios error:', error);
         }
     };
-    
 
-    useEffect(() => {
-        getFollowing();
-        getFollowers()
-    }, []);
 
     return (
         <View style={[styles.container, { backgroundColor: background_color }]}>

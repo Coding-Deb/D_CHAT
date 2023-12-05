@@ -11,8 +11,8 @@ export default function ChatsCards({ senderId, receiverId }) {
       const token = await AsyncStorage.getItem('token');
       const response = await axios.get('http://192.168.157.210:5000/api/auth/receiveChats', {
         params: {
-          senderId: "656ac7e03b6af8bd981d36d6",
-          receiverId: "656c81b03db6e3089fc0c522"
+          senderId: senderId,
+          receiverId: receiverId
         },
         headers: {
           Authorization: `Bearer ${token}`,
