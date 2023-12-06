@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
-});
+}); 
 
 const authRoutes = require('./Routes/authRoutes');
 app.use('/api/auth', authRoutes);
