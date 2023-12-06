@@ -11,7 +11,7 @@ export default function BottomTab({ page }) {
   const {background_color,text_color} = useContext(Context)
   const navigation = useNavigation()
   return (
-    <View style={[styles.container,{backgroundColor:background_color}]}>
+    <View style={[styles.container,{backgroundColor:background_color,shadowColor:text_color}]}>
       {
         page === 'Allchat' ?
           <Pressable onPress={()=>{navigation.navigate('AllChat')}}>
@@ -57,13 +57,17 @@ export default function BottomTab({ page }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 70,
+    height: 80,
     width: width ,
-    backgroundColor: 'green',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems:'center',
-    bottom:0
+    bottom:0,
+    elevation: 8,
+    shadowOffset: { width: -7, height: -7 },
+    shadowOpacity: 0.9,
+    borderTopLeftRadius:25,
+    borderTopRightRadius:25,
   },
   btn:{
     height:2,

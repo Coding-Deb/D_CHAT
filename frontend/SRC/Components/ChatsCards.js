@@ -21,7 +21,6 @@ export default function ChatsCards({ senderId, receiverId }) {
 
       setChats(response.data.chats);
       console.log(response.data.chats);
-      
 
     } catch (error) {
       console.error('Error fetching chats:', error.message);

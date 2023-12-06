@@ -40,11 +40,9 @@ export default function UserNames() {
   }, []); // Remove usernames from the dependency array
   return (
     <View style={[styles.container, { backgroundColor: background_color }]}>
-      {/* <TopTab page={'UserNames'} /> */}
-      {/* <Text style={[styles.text,{color: text_color}]}>AllChat Page</Text> */}
+      <TopTab page={'Users'} /> 
       <View style={{ justifyContent: 'space-between', height: height - 130, marginVertical: 8 }}>
         <View style={styles.main}>
-          <TopTab page={'Users'} />
           <FlatList
             data={usernames}
             renderItem={({ item }) => {
@@ -58,7 +56,6 @@ export default function UserNames() {
             }}
           />
         </View>
-        {/* <BottomTab page={'UserNames'} /> */}
       </View>
     </View>
   )
@@ -68,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   text: {
     fontSize: 25,

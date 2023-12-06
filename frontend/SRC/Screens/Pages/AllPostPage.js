@@ -60,7 +60,7 @@ const handleRefresh = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: 'grey' }]}>
+    <View style={[styles.container, { backgroundColor: '#F5F5DC' }]}>
       <TopTab page={'AllPost'} />
       <FlatList
         data={postData}
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF9F6',
     padding: 15,
     marginVertical: 5,
+    borderRadius:22
   },
   cardtexttitle: {
     fontSize: 20,

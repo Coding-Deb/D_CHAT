@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FontAwesome,Feather} from 'react-native-vector-icons'
 
 export default function OnboardingPage() {
   const navigation = useNavigation()
@@ -35,7 +36,8 @@ export default function OnboardingPage() {
 
   return (
     <View style={styles.container}>
-      <Text>OnboardingPage</Text>
+      <Feather name='message-square' size={75} color='#fff'/>
+      <Text style={styles.text}>D CHAT</Text>
     </View>
   )
 }
@@ -43,8 +45,15 @@ export default function OnboardingPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#5D3FD3',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text:{
+    fontSize: 35,
+    fontWeight:'bold',
+    color:'#fff',
+    marginTop:40,
+
+  }
 })

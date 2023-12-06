@@ -24,27 +24,27 @@ export default function TopTab({ page, name, id }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: background_color, borderBottomWidth: 2, borderBottomColor: 'grey' }]}>
+    <View style={[styles.container, { backgroundColor: '#5D3FD3', borderBottomLeftRadius:17,borderBottomRightRadius:17, }]}>
       {page === 'About' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>Profile</Text>
+          <Text style={[styles.text, { color: 'white' }]}>Profile</Text>
           <Pressable onPress={handleLogout}>
-            <MaterialCommunityIcons name="logout" size={30} color={text_color} />
+            <MaterialCommunityIcons name="logout" size={30} color='white' />
           </Pressable>
         </View>
       ) : null}
       {page === 'Allchat' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>D CHAT</Text>
+          <Text style={[styles.text, { color: 'white' }]}>D CHAT</Text>
           <View style={{ flexDirection: 'row' }}>
             <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('AllPost') }}>
-              <FontAwesome5 name="at" size={25} color={text_color} />
+              <FontAwesome5 name="at" size={25} color='white' />
             </Pressable>
             <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('Search') }}>
-              <Entypo name='magnifying-glass' size={27} color={text_color} />
+              <Entypo name='magnifying-glass' size={27} color='white' />
             </Pressable>
             <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('Notification') }}>
-              <FontAwesome name="bell" size={25} color={text_color} />
+              <FontAwesome name="bell" size={25} color='white' />
               <View style={{ backgroundColor: text_color, height: 17, width: 17, borderRadius: 50, position: 'absolute', right: -10, top: -5, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: 12, fontWeight: '700', color: background_color }}>
                   2
@@ -56,31 +56,31 @@ export default function TopTab({ page, name, id }) {
       ) : null}
       {page === 'Allgroup' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>Groups</Text>
+          <Text style={[styles.text, { color: 'white' }]}>Groups</Text>
           <View style={{ flexDirection: 'row' }}>
             <Pressable style={{ marginHorizontal: 9 }} onPress={() => { navigation.navigate('Search') }}>
-              <Entypo name='magnifying-glass' size={27} color={text_color} />
+              <Entypo name='magnifying-glass' size={27} color='white' />
             </Pressable>
             <Pressable style={{ marginHorizontal: 9 }} onPress={showVisible}>
-              <FontAwesome name="edit" size={28} color={text_color} />
+              <FontAwesome name="edit" size={28} color='white' />
             </Pressable>
             <Pressable style={{ marginHorizontal: 9 }}>
-              <Ionicons name="ellipsis-vertical-outline" size={28} color={text_color} />
+              <Ionicons name="ellipsis-vertical-outline" size={28} color='white' />
             </Pressable>
           </View>
         </View>
       ) : null}
       {page === 'AllPost' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
+          <Text style={[styles.text, { color: 'white' }]}>
             Posts
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
             <Pressable style={{ marginHorizontal: 7, borderRadius: 50 }} onPress={() => { navigation.navigate('Posts') }}>
-              <Feather name="plus-circle" size={32} color={text_color} />
+              <Feather name="plus-circle" size={29} color='white' />
             </Pressable>
             <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
-              <Entypo name='magnifying-glass' size={27} color={text_color} />
+              <Entypo name='magnifying-glass' size={27} color='white' />
             </Pressable>
 
           </View>
@@ -88,47 +88,45 @@ export default function TopTab({ page, name, id }) {
       ) : null}
       {page === 'Notification' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
+          <Text style={[styles.text, { color: 'white' }]}>
             Notification
           </Text>
         </View>
       ) : null}
       {page === 'Search' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
+          <Text style={[styles.text, { color: 'white' }]}>
             Search
           </Text>
         </View>
       ) : null}
       {page === 'Profile' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
+          <Text style={[styles.text, { color: 'white' }]}>
             Profile
           </Text>
         </View>
       ) : null}
       {page === 'Users' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]}>
+          <Text style={[styles.text, { color: 'white' }]}>
             All Users
           </Text>
           <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
-            <Entypo name='magnifying-glass' size={27} color={text_color} />
+            <Entypo name='magnifying-glass' size={27} color='white' />
           </Pressable>
         </View>
       ) : null}
       {page === 'Chat' ? (
         <View style={styles.topbar}>
-          <Text style={[styles.text, { color: text_color }]} onPress={() => { navigation.navigate('userProfile', { name: name, id: id }) }}>
+          <Text style={[styles.text, { color: 'white' }]} onPress={() => { navigation.navigate('userProfile', { name: name, id: id }) }}>
             {name}
           </Text>
           <Pressable style={{ marginHorizontal: 7 }} onPress={() => { navigation.navigate('Search') }}>
-            <Entypo name='phone' size={27} color={text_color} />
+            <Entypo name='phone' size={27} color='white' />
           </Pressable>
         </View>
       ) : null}
-
-
     </View>
   );
 }
@@ -139,7 +137,8 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'center',
     paddingHorizontal: 22,
-  },
+
+  }, 
   text: {
     fontSize: 25,
     fontWeight: '800',

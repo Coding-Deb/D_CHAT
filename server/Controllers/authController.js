@@ -482,6 +482,8 @@ exports.unfollowUser = async (req, res) => {
   }
 };
 
+// controllers/user.controller.js
+
 exports.sendNotification = async (userId, message) => {
   try {
     const newNotification = new Notification({
@@ -490,6 +492,10 @@ exports.sendNotification = async (userId, message) => {
     });
 
     await newNotification.save();
+
+    // You can also emit a real-time notification using sockets or other methods if needed.
+    // Example with socket.io:
+    // io.to(userId).emit('notification', { message, timestamp: newNotification.timestamp });
   } catch (error) {
     console.error('Error sending notification:', error);
   }

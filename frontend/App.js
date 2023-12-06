@@ -24,13 +24,13 @@ export default function App() {
     <Statedata>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Onboarding'>
-          <Stack.Screen name='AllChat' component={AllChatPage} options={{animation: 'slide_from_right'}} />
+          <Stack.Screen name='AllChat' component={AllChatPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='AllGroup' component={AllGroupPage} options={{animation: 'slide_from_right'}} />
           <Stack.Screen name='AllPost' component={AllPostPage} options={{animation: 'slide_from_right'}} />
           <Stack.Screen name='About' component={AboutPage} options={{animation: 'slide_from_right'}} />
           <Stack.Screen name='UserName' component={UserNames} options={{animation: 'slide_from_bottom'}} />
-          <Stack.Screen name='Login' component={Login} options={{animation: 'slide_from_left'}} />
-          <Stack.Screen name='Register' component={Register} options={{animation: 'slide_from_left'}} />
+          <Stack.Screen name='Login' component={Login} options={{animation: 'slide_from_right'}} />
+          <Stack.Screen name='Register' component={Register} options={{animation: 'slide_from_right'}} />
           <Stack.Screen name='Notification' component={NotificationPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Search' component={SearchPage} options={{animation: 'slide_from_bottom'}} />
           <Stack.Screen name='Update' component={UpdatePage} options={{animation: 'slide_from_bottom'}} />

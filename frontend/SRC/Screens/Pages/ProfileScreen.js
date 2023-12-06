@@ -1,6 +1,6 @@
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import Context from '../../Context/Context';
 import TopTab from '../../Components/TopTab';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +13,9 @@ export default function ProfileScreen() {
     const { text_color, background_color, changfollow, isFollowing } = useContext(Context)
     const [followerCount, setFollowerCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
+    const navigation = useNavigation()
+    const id = Route.params.id
+    const Username = Route.params.name
 
     const checkIfUserIsFollowing = async () => {
         try {
@@ -69,6 +72,7 @@ export default function ProfileScreen() {
             console.log(response.data);
             // You might want to update the follower count here or trigger a refresh
             getFollowing();
+            console.log('Username: '+ Username , 'id: '+ id);
         } catch (error) {
             console.error('Axios error:', error);
         }
@@ -112,7 +116,7 @@ export default function ProfileScreen() {
 
     return (
         <View style={[styles.container, { backgroundColor: background_color }]}>
-            <TopTab page={'Profile'} />
+            <TopTab page={'Profile'} name={Username} id={id}/>
             <View style={{ justifyContent: 'center', alignItems: 'center', padding: 25, alignContent: 'center', alignSelf: 'center' }}>
 
                 <Image
@@ -137,6 +141,21 @@ export default function ProfileScreen() {
                         </Text>
                     )}
                 </Pressable>
+                {isFollowing ? (
+                    <Pressable
+                        style={[
+                            styles.btn,
+                            { backgroundColor: '#2AAA8A', shadowColor: background_color },
+                        ]}
+                        onPress={()=>{navigation.navigate('Chat',{id: id,username: Username})}}
+                    >
+                        <Text style={[styles.btntext, { color: background_color }]}>
+                            Message
+                        </Text>
+                    </Pressable>
+                ) : null
+                }
+
                 <View style={[styles.showfollow, { backgroundColor: background_color }]}>
                     <View style={styles.folloing}>
                         <Text style={[styles.text, { color: text_color }]}>
