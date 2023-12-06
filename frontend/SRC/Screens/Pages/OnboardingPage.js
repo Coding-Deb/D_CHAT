@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FontAwesome,Feather} from 'react-native-vector-icons'
+import LottieView from 'lottie-react-native';
+
 
 export default function OnboardingPage() {
   const navigation = useNavigation()
@@ -38,6 +40,11 @@ export default function OnboardingPage() {
     <View style={styles.container}>
       <Feather name='message-square' size={75} color='#fff'/>
       <Text style={styles.text}>D CHAT</Text>
+      {/* <LottieView
+  source={{ uri: 'https://lottie.host/649761fa-0cbd-480e-9ecf-8b599fa4d77a/QpFIm0MbhB.json' }}
+  autoPlay
+  loop
+/> */}
     </View>
   )
 }
